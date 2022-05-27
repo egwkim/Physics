@@ -87,5 +87,5 @@ function updateText() {
     `P: ${Math.round(cursorY * scale)}   V: ${Math.round(cursorX * scale)}\n` +
     `Q in: ${Math.round(Q_in)}   Q out: ${Math.round(Q_out)}   Total Q: ${Math.round(Q_total)}\n` +
     `W in: ${Math.round(W_in)}   W out: ${Math.round(W_out)}   Total W: ${Math.round(W_total)}\n` +
-    `e: ${Math.round((W_out / Q_in) * 1000) / 10}%`;
+    `e: ${Math.round((W_total / Q_in) * 1000) / 10}%`;
 }
