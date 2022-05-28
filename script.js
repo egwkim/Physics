@@ -44,15 +44,23 @@ function calculate(V, P, dV, dP) {
 }
 
 function whileMouseDown(event) {
+  let P = cursorX * scale;
+  let V = cursorY * scale;
   if (pointList.length) {
     let dCursorX = event.pageX - cursorX;
     let dCursorY = cvsHeight - event.pageY - cursorY;
-    calculate(cursorX * scale, cursorY * scale, dCursorX * scale, dCursorY * scale);
+    calculate(P, V, dCursorX * scale, dCursorY * scale);
   }
   cursorX = event.pageX;
   cursorY = cvsHeight - event.pageY;
   pointList.push({ x: cursorX, y: cursorY });
+  P = cursorX * scale;
+  V = cursorY * scale;
+  clearCvs();
   drawLines();
+  if (isMouseDown) {
+    renderIsotherm((P * V) / k);
+  }
   updateText();
 }
 
@@ -68,7 +76,7 @@ function whileMouseDown(event) {
     whileMouseDown(event);
   });
 
-  addEventListener('mouseup', (event) => {
+  addEventListener('mouseup', () => {
     isMouseDown = 0;
   });
   addEventListener('keypress', (event) => {

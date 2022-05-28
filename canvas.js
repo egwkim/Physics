@@ -7,6 +7,7 @@ function resizeCvs() {
   canvas.setAttribute('width', window.innerWidth);
   canvas.setAttribute('height', window.innerHeight);
   cvsHeight = canvas.clientHeight;
+  cvsWidth = canvas.clientWidth;
   try {
     drawLines();
   } catch (error) {}
@@ -21,11 +22,19 @@ ctx.lineCap = 'round';
 ctx.lineWidth = '5px';
 
 function renderIsotherm(T) {
-  // TODO Render isothermal line
+  ctx.beginPath();
+  for (let y = 0; y < cvsHeight; y++) {
+    x = (k * T) / (scale * scale * (cvsHeight - y));
+    if (cvsWidth < x) {
+      break;
+    }
+    ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = '#22aa66aa';
+  ctx.stroke();
 }
 
 function drawLines() {
-  ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
   if (!pointList.length) {
     return;
   }
@@ -34,5 +43,10 @@ function drawLines() {
   for (let i = 0; i < pointList.length; i++) {
     ctx.lineTo(pointList[i].x, cvsHeight - pointList[i].y);
   }
+  ctx.strokeStyle = '#000000';
   ctx.stroke();
+}
+
+function clearCvs() {
+  ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 }
