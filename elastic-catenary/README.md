@@ -1,7 +1,7 @@
 # elastic-catenary
 Simulate elastic catenary with html5 canvas and javascript
 
-[Github page](https://egwkim.github.io/elastic-catenary/index.html)
+[Github page](https://egwkim.github.io/physics/elastic-catenary)
 
 
 * * *
