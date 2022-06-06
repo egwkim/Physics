@@ -4,5 +4,5 @@ Physics is fun.
 * * *
 
 # Projects
-1. [elastic catenary](https://egwkim.github.io/Physics/elastic-catenary/)
-2. [https://egwkim.github.io/Physics/heat-engine/](https://egwkim.github.io/Physics/elastic-catenary/)
+1. [elastic catenary](https://egwkim.github.io/physics/elastic-catenary/)
+2. [heat engine](https://egwkim.github.io/physics/heat-engine/)
