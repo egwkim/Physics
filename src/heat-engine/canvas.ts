@@ -1,11 +1,13 @@
-const canvas = document.getElementById('canvas');
+import {k, scale, pointList} from './script.js'
+
+const canvas = <HTMLCanvasElement> document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-let cvsHeight;
+let cvsHeight: number, cvsWidth: number;
 
 function resizeCvs() {
-  canvas.setAttribute('width', window.innerWidth);
-  canvas.setAttribute('height', window.innerHeight);
+  canvas.setAttribute('width', `${window.innerWidth}px`);
+  canvas.setAttribute('height', `${window.innerHeight}px`);
   cvsHeight = canvas.clientHeight;
   cvsWidth = canvas.clientWidth;
   try {
@@ -19,12 +21,12 @@ resizeCvs();
 
 ctx.strokeStyle = 'black';
 ctx.lineCap = 'round';
-ctx.lineWidth = '5px';
+ctx.lineWidth = 5;
 
 function renderIsotherm(T) {
   ctx.beginPath();
   for (let y = 0; y < cvsHeight; y++) {
-    x = (k * T) / (scale * scale * (cvsHeight - y));
+    let x = (k * T) / (scale * scale * (cvsHeight - y));
     if (cvsWidth < x) {
       break;
     }
@@ -50,3 +52,5 @@ function drawLines() {
 function clearCvs() {
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 }
+
+export { cvsHeight, renderIsotherm, clearCvs, drawLines };

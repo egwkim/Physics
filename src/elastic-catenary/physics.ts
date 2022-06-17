@@ -1,5 +1,11 @@
 class Point {
-  constructor(x, y) {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  m: number;
+
+  constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
     this.vx = 0;
@@ -7,23 +13,23 @@ class Point {
     this.m = 1;
   }
 
-  static distance(a, b) {
+  static distance(a: Point, b: Point) {
     return ((a.x - b.x) ** 2 + (a.y - b.y) ** 2) ** 0.5;
   }
 
-  static tan(a, b) {
+  static tan(a: Point, b: Point) {
     return (a.y - b.y) / (a.x - b.x);
   }
 
-  static sin(a, b) {
+  static sin(a: Point, b: Point) {
     return (b.y - a.y) / Point.distance(a, b);
   }
 
-  static cos(a, b) {
+  static cos(a: Point, b: Point) {
     return (b.x - a.x) / Point.distance(a, b);
   }
 
-  static applyElasticForce(a, b) {
+  static applyElasticForce(a: Point, b: Point) {
     let F = springConstant * (Point.distance(a, b) - initLen);
     if (toggleStretchOnly) F = Math.max(F, 0);
 
@@ -40,14 +46,14 @@ class Point {
     ctx.fill();
   }
 
-  lineTo(point) {
+  lineTo(point: Point) {
     ctx.beginPath();
     ctx.moveTo(this.x, this.y);
     ctx.lineTo(point.x, point.y);
     ctx.stroke();
   }
 
-  applyForce(xForce, yForce) {
+  applyForce(xForce: number, yForce: number) {
     this.vx += (xForce * dt) / this.m;
     this.vy += (yForce * dt) / this.m;
   }
@@ -67,7 +73,7 @@ class Point {
 }
 
 function physicsInit() {
-  points=[];
+  points = [];
   for (let i = 0; i < pointCnt; i++) {
     points[i] = new Point(i * pointDistance + 5, 5);
   }

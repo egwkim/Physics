@@ -1,3 +1,5 @@
+import {cvsHeight, clearCvs, renderIsotherm, drawLines } from './canvas.js'
+
 setInterval(() => {}, 100);
 
 // PV = kT
@@ -10,8 +12,8 @@ const scale = 1 / 10;
 
 let pointList = [];
 
-let cursorX;
-let cursorY;
+let cursorX: number;
+let cursorY: number;
 
 let isMouseDown = 0;
 
@@ -97,3 +99,5 @@ function updateText() {
     `W in: ${Math.round(W_in)}   W out: ${Math.round(W_out)}   Total W: ${Math.round(W_total)}\n` +
     `e: ${Math.round((W_total / Q_in) * 1000) / 10}%`;
 }
+
+export {k, scale, pointList}

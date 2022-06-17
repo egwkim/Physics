@@ -48,17 +48,17 @@ function clearFrame() {
 }
 
 function getInputValues() {
-  pointCnt = Number(document.getElementById('point-cnt').value);
-  pointDistance = Number(document.getElementById('distance').value);
-  springConstant = Number(document.getElementById('spring-constant').value);
-  gravityConstant = Number(document.getElementById('gravity-constant').value);
-  initLen = Number(document.getElementById('initLen').value);
-  friction = Number(document.getElementById('friction').value);
-  dt = Number(document.getElementById('dt').value);
-  toggleStretchOnly = document.getElementById('toggle-stretch-only').checked;
-  toggleCircle = document.getElementById('toggle-circle').checked;
-  toggleLine = document.getElementById('toggle-line').checked;
-  toggleMovement = document.getElementById('toggle-movement').checked;
+  pointCnt = Number((<HTMLInputElement>document.getElementById('point-cnt')).value);
+  pointDistance = Number((<HTMLInputElement>document.getElementById('distance')).value);
+  springConstant = Number((<HTMLInputElement>document.getElementById('spring-constant')).value);
+  gravityConstant = Number((<HTMLInputElement>document.getElementById('gravity-constant')).value);
+  initLen = Number((<HTMLInputElement>document.getElementById('initLen')).value);
+  friction = Number((<HTMLInputElement>document.getElementById('friction')).value);
+  dt = Number((<HTMLInputElement>document.getElementById('dt')).value);
+  toggleStretchOnly = (<HTMLInputElement>document.getElementById('toggle-stretch-only')).checked;
+  toggleCircle = (<HTMLInputElement>document.getElementById('toggle-circle')).checked;
+  toggleLine = (<HTMLInputElement>document.getElementById('toggle-line')).checked;
+  toggleMovement = (<HTMLInputElement>document.getElementById('toggle-movement')).checked;
 }
 
 function exportCoords() {

@@ -1,4 +1,4 @@
-const canvas = document.getElementById('canvas');
+const canvas = <HTMLCanvasElement>document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const movementAvgP = document.getElementById('movement-avg');
@@ -7,8 +7,8 @@ const pauseBtn = document.getElementById('pause');
 const resumeBtn = document.getElementById('resume');
 
 function resizeCvs() {
-  canvas.setAttribute('width', window.innerWidth - 10);
-  canvas.setAttribute('height', window.innerHeight - 10);
+  canvas.setAttribute('width', `${window.innerWidth - 10}px`);
+  canvas.setAttribute('height', `${window.innerHeight - 10}px`);
 }
 
 window.onresize = resizeCvs;
