@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "sourceMap": false,
+    "lib": ["es6", "dom"]
+  }
+}
