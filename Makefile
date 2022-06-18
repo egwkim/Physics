@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := build
+
 # Build
 .PHONY: build
 build: clean dist tsc copy
