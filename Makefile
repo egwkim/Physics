@@ -11,6 +11,11 @@ clean:
 
 # Add worktree for gh-pages branch
 dist:
+	git stash && \
+	git checkout --orphan=gh-pages && \
+	git reset && \
+	git commit --allow-empty -m "Initial commit" && \
+	git switch -f main && \
 	git worktree add dist gh-pages
 
 # Copy files from src to dist excluding *.ts
