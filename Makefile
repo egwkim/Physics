@@ -2,32 +2,42 @@
 
 # Build
 .PHONY: build
-build: clean dist tsc copy
+build: clean tsc copy
 
 # Removing the actual dist directory confuses git and will require a git worktree prune to fix
-,PHONY: clean
+.PHONY: clean
 clean:
 	rm -rf dist/*
 
-# Add worktree for gh-pages branch
-dist:
-	git stash && \
-	git checkout --orphan=gh-pages && \
-	git reset && \
-	git commit --allow-empty -m "Initial commit" && \
-	git switch -f main && \
-	git worktree add dist gh-pages
-
 # Copy files from src to dist excluding *.ts
 .PHONY: copy
-copy: dist
+copy:
 	cd src && \
 	find ! -name '*.ts' -type f -exec cp --parents {} ../dist \;
 
 # Build typescript
 .PHONY: tsc
-tsc: dist
+tsc:
 	tsc --project tsconfig.prod.json
+
+# Add worktree for gh-pages branch
+# Reset dist worktree if it exists
+.PHONY: dist
+dist:
+	stashed=$$(git stash) && \
+	echo $$stashed && \
+	if git checkout --orphan=gh-pages; then \
+		git reset && \
+		git commit --allow-empty -m "Initial commit" && \
+		git switch -f main; \
+	fi; \
+	if [ -d "dist" ]; then \
+		rm -r dist;\
+	fi; \
+	git worktree add -f dist gh-pages && \
+	if [[ $$stashed == Saved* ]]; then \
+		git stash pop; \
+	fi
 
 # Deploy to github page
 .PHONY: deploy
