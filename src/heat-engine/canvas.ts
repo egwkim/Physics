@@ -1,6 +1,6 @@
-import {k, scale, pointList} from './script.js'
+import { k, scale, pointList } from './script.js';
 
-const canvas = <HTMLCanvasElement> document.getElementById('canvas');
+const canvas = <HTMLCanvasElement>document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 let cvsHeight: number, cvsWidth: number;

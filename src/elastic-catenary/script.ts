@@ -24,8 +24,7 @@ function loop() {
       }
 
       // calculate total movement
-      if (toggleMovement)
-        movement += (points[i].vx ** 2 + points[i].vy ** 2) ** 0.5;
+      if (toggleMovement) movement += (points[i].vx ** 2 + points[i].vy ** 2) ** 0.5;
     }
     // show total movement
     if (toggleMovement) {
@@ -71,8 +70,7 @@ function exportCoords() {
   downloadElement.style.display = 'none';
 
   downloadElement.href =
-    'data:text/plain;charset=utf-8,' +
-    encodeURIComponent(JSON.stringify(coords));
+    'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(coords));
   downloadElement.download = 'coords.json';
 
   document.body.appendChild(downloadElement);

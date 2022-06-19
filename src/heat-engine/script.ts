@@ -1,4 +1,4 @@
-import {cvsHeight, clearCvs, renderIsotherm, drawLines } from './canvas.js'
+import { cvsHeight, clearCvs, renderIsotherm, drawLines } from './canvas.js';
 
 setInterval(() => {}, 100);
 
@@ -100,4 +100,4 @@ function updateText() {
     `e: ${Math.round((W_total / Q_in) * 1000) / 10}%`;
 }
 
-export {k, scale, pointList}
+export { k, scale, pointList };
