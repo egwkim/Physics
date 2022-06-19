@@ -35,7 +35,7 @@ dist:
 		rm -r dist;\
 	fi; \
 	git worktree add -f dist gh-pages && \
-	if [[ $$stashed == Saved* ]]; then \
+	if [ ! "$${stashed%%Saved*}" ]; then \
 		git stash pop; \
 	fi
 
