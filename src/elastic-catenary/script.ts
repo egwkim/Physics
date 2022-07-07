@@ -69,8 +69,7 @@ function exportCoords() {
 
   downloadElement.style.display = 'none';
 
-  downloadElement.href =
-    'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(coords));
+  downloadElement.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(coords));
   downloadElement.download = 'coords.json';
 
   document.body.appendChild(downloadElement);
@@ -79,12 +78,12 @@ function exportCoords() {
   document.body.removeChild(downloadElement);
 }
 
-function toggleControl(e) {
+function toggleControl(e: HTMLElement) {
   if (e.innerText == 'hide control') {
     e.innerText = 'show control';
-    document.getElementById('control-panel').style.display = 'none';
+    document.getElementById('control-panel')!.style.display = 'none';
   } else {
     e.innerText = 'hide control';
-    document.getElementById('control-panel').style.display = '';
+    document.getElementById('control-panel')!.style.display = '';
   }
 }

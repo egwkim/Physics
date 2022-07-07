@@ -1,10 +1,10 @@
 const canvas = <HTMLCanvasElement>document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-const movementAvgP = document.getElementById('movement-avg');
-const movementSumP = document.getElementById('movement-sum');
-const pauseBtn = document.getElementById('pause');
-const resumeBtn = document.getElementById('resume');
+const movementAvgP = document.getElementById('movement-avg') as HTMLElement;
+const movementSumP = document.getElementById('movement-sum') as HTMLElement;
+const pauseBtn = document.getElementById('pause') as HTMLElement;
+const resumeBtn = document.getElementById('resume') as HTMLElement;
 
 function resizeCvs() {
   canvas.setAttribute('width', `${window.innerWidth - 10}px`);
@@ -13,8 +13,8 @@ function resizeCvs() {
 
 window.onresize = resizeCvs;
 
-let points = [];
-let interv = null;
+let points: Point[] = [];
+let interv: number;
 
 // Physical constants
 let springConstant = 1;
