@@ -1,7 +1,7 @@
 import { k, scale, pointList } from './script.js';
 
 const canvas = <HTMLCanvasElement>document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
 let cvsHeight: number, cvsWidth: number;
 
@@ -25,7 +25,7 @@ window.onresize = resizeCvs;
 
 resizeCvs();
 
-function renderIsotherm(T) {
+function renderIsotherm(T: number) {
   ctx.beginPath();
   for (let y = 0; y < cvsHeight; y++) {
     let x = (k * T) / (scale * scale * (cvsHeight - y));
@@ -43,9 +43,9 @@ function drawLines() {
     return;
   }
   ctx.beginPath();
-  ctx.moveTo(pointList[0].x, cvsHeight - pointList[0].y);
+  ctx.moveTo(pointList[0].x, pointList[0].y);
   for (let i = 0; i < pointList.length; i++) {
-    ctx.lineTo(pointList[i].x, cvsHeight - pointList[i].y);
+    ctx.lineTo(pointList[i].x, pointList[i].y);
   }
   ctx.strokeStyle = '#000000';
   ctx.stroke();

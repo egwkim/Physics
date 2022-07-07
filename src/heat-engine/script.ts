@@ -6,14 +6,19 @@ setInterval(() => {}, 100);
 const k = 1;
 
 // dU = c * dT
-const c = 1;
+const c = 2;
 
 const scale = 1 / 10;
 
-let pointList = [];
+let pointList: { x: number; y: number }[] = [];
 
-let cursorX: number;
-let cursorY: number;
+let drawMode = 0; // 0 free draw, 1 isobaric, 2 isochoric, 3 isotherm, 4 adiabatic
+
+let prevX: number;
+let prevY: number;
+
+let P: number;
+let V: number;
 
 let isMouseDown = 0;
 
@@ -24,9 +29,9 @@ let W_in = 0;
 let W_out = 0;
 let W_total = 0;
 
-function calculate(V, P, dV, dP) {
+function calculate(V: number, P: number, dV: number, dP: number) {
   let W = (dV * (2 * P + dP)) / 2;
-  let dT = (V + dV) * (P + dP) - V * P;
+  let dT = ((V + dV) * (P + dP) - V * P) / k;
   let dU = c * dT;
   let Q = dU + W;
 
@@ -45,25 +50,71 @@ function calculate(V, P, dV, dP) {
   }
 }
 
-function whileMouseDown(event) {
-  let P = cursorX * scale;
-  let V = cursorY * scale;
-  if (pointList.length) {
-    let dCursorX = event.pageX - cursorX;
-    let dCursorY = cvsHeight - event.pageY - cursorY;
-    calculate(P, V, dCursorX * scale, dCursorY * scale);
+function whileMouseDown(event: { pageX: number; pageY: number }) {
+  if (pointList.length == 0) {
+    prevX = event.pageX;
+    prevY = event.pageY;
+
+    P = prevX * scale;
+    V = (cvsHeight - prevY) * scale;
+
+    pointList.push({ x: prevX, y: prevY });
+
+    clearCvs();
+    drawLines();
+    renderIsotherm((P * V) / k);
+    updateText();
+
+    return;
   }
-  cursorX = event.pageX;
-  cursorY = cvsHeight - event.pageY;
-  pointList.push({ x: cursorX, y: cursorY });
-  P = cursorX * scale;
-  V = cursorY * scale;
+
+  let newX: number, newY: number;
+  switch (drawMode) {
+    case 1:
+      // isobaric
+      newX = event.pageX;
+      newY = prevY;
+      break;
+    case 2:
+      // isochoric
+      newX = prevX;
+      newY = event.pageY;
+      break;
+    case 3:
+      // isotherm
+      newX = event.pageX;
+      newY = cvsHeight - (P * V) / (newX * scale * scale);
+      break;
+    case 4:
+      // adiabatic
+      newX = event.pageX;
+      newY =
+        cvsHeight -
+        ((cvsHeight - prevY) * ((-prevX + newX) / 2 - (c / k) * prevX)) / ((prevX - newX) / 2 - (c / k) * newX);
+      break;
+    default:
+      // free draw
+      newX = event.pageX;
+      newY = event.pageY;
+      break;
+  }
+
+  let dV = (newX - prevX) * scale;
+  let dP = (-newY + prevY) * scale;
+  calculate(P, V, dV, dP);
+
+  pointList.push({ x: newX, y: newY });
+
+  P = newX * scale;
+  V = (cvsHeight - newY) * scale;
+
   clearCvs();
   drawLines();
-  if (isMouseDown) {
-    renderIsotherm((P * V) / k);
-  }
+  renderIsotherm((P * V) / k);
   updateText();
+
+  prevX = newX;
+  prevY = newY;
 }
 
 (() => {
@@ -81,20 +132,23 @@ function whileMouseDown(event) {
   addEventListener('mouseup', () => {
     isMouseDown = 0;
   });
+
   addEventListener('keypress', (event) => {
     if (event.code == 'Enter') {
       whileMouseDown({
         pageX: pointList[0].x,
-        pageY: cvsHeight - pointList[0].y,
+        pageY: pointList[0].y,
       });
+    } else if (/^\d+$/.test(event.key) && 0 <= parseInt(event.key) && parseInt(event.key) <= 4) {
+      drawMode = parseInt(event.key);
     }
   });
 })();
 
-const textID = document.getElementById('text-box');
+const textElement = document.getElementById('text-box') as HTMLElement;
 function updateText() {
-  textID.innerText =
-    `P: ${Math.round(cursorY * scale)}   V: ${Math.round(cursorX * scale)}\n` +
+  textElement.innerText =
+    `P: ${Math.round(prevY * scale)}   V: ${Math.round(prevX * scale)}\n` +
     `Q in: ${Math.round(Q_in)}   Q out: ${Math.round(Q_out)}   Total Q: ${Math.round(Q_total)}\n` +
     `W in: ${Math.round(W_in)}   W out: ${Math.round(W_out)}   Total W: ${Math.round(W_total)}\n` +
     `e: ${Math.round((W_total / Q_in) * 1000) / 10}%`;
