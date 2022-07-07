@@ -8,8 +8,14 @@ let cvsHeight: number, cvsWidth: number;
 function resizeCvs() {
   canvas.setAttribute('width', `${window.innerWidth}px`);
   canvas.setAttribute('height', `${window.innerHeight}px`);
+
   cvsHeight = canvas.clientHeight;
   cvsWidth = canvas.clientWidth;
+
+  ctx.strokeStyle = 'black';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 3;
+
   try {
     drawLines();
   } catch (error) {}
@@ -18,10 +24,6 @@ function resizeCvs() {
 window.onresize = resizeCvs;
 
 resizeCvs();
-
-ctx.strokeStyle = 'black';
-ctx.lineCap = 'round';
-ctx.lineWidth = 5;
 
 function renderIsotherm(T) {
   ctx.beginPath();
