@@ -1,3 +1,4 @@
+"use strict";
 function init() {
     getInputValues();
     physicsInit();
@@ -61,9 +62,7 @@ function exportCoords() {
     }
     let downloadElement = document.createElement('a');
     downloadElement.style.display = 'none';
-    downloadElement.href =
-        'data:text/plain;charset=utf-8,' +
-            encodeURIComponent(JSON.stringify(coords));
+    downloadElement.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(coords));
     downloadElement.download = 'coords.json';
     document.body.appendChild(downloadElement);
     downloadElement.click();

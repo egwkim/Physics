@@ -1,3 +1,4 @@
+"use strict";
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const movementAvgP = document.getElementById('movement-avg');
@@ -10,7 +11,7 @@ function resizeCvs() {
 }
 window.onresize = resizeCvs;
 let points = [];
-let interv = null;
+let interv;
 // Physical constants
 let springConstant = 1;
 let initLen = 5; // Distance between two points when spring is undeformed

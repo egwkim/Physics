@@ -7,6 +7,9 @@ function resizeCvs() {
     canvas.setAttribute('height', `${window.innerHeight}px`);
     cvsHeight = canvas.clientHeight;
     cvsWidth = canvas.clientWidth;
+    ctx.strokeStyle = 'black';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = 3;
     try {
         drawLines();
     }
@@ -14,9 +17,6 @@ function resizeCvs() {
 }
 window.onresize = resizeCvs;
 resizeCvs();
-ctx.strokeStyle = 'black';
-ctx.lineCap = 'round';
-ctx.lineWidth = 5;
 function renderIsotherm(T) {
     ctx.beginPath();
     for (let y = 0; y < cvsHeight; y++) {
@@ -34,9 +34,9 @@ function drawLines() {
         return;
     }
     ctx.beginPath();
-    ctx.moveTo(pointList[0].x, cvsHeight - pointList[0].y);
+    ctx.moveTo(pointList[0].x, pointList[0].y);
     for (let i = 0; i < pointList.length; i++) {
-        ctx.lineTo(pointList[i].x, cvsHeight - pointList[i].y);
+        ctx.lineTo(pointList[i].x, pointList[i].y);
     }
     ctx.strokeStyle = '#000000';
     ctx.stroke();
