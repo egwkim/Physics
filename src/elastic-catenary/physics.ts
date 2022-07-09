@@ -1,3 +1,19 @@
+// TODO Cleanup code
+
+import {
+  ctx,
+  springConstant,
+  initLen,
+  gravityConstant,
+  friction,
+  toggleStretchOnly,
+  dt,
+  pointCnt,
+  pointDistance,
+} from './script.js';
+
+let points: Point[] = [];
+
 class Point {
   x: number;
   y: number;
@@ -95,3 +111,5 @@ function physicsUpdate() {
     points[i].updatePos();
   }
 }
+
+export { Point, physicsInit, physicsUpdate, points };

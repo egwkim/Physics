@@ -7,8 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Elastic catenary simultaion</title>
   <link rel="stylesheet" href="./style.css" />
-  <script src="./script.js"></script>
-  <script src="./physics.js"></script>
+  <script type="module" src="./script.js"></script>
+  <script type="module" src="./physics.js"></script>
 </head>
 
 <body>
@@ -16,7 +16,7 @@
     <canvas id="canvas"></canvas>
   </div>
 
-  <button id="control-button" onclick="toggleControl(this);">hide control</button>
+  <button id="control-button">hide control</button>
   <div id="control-panel">
     <div id="settings">
       <div>
@@ -92,14 +92,7 @@
 
       <div>
         toggleMovement
-        <input type="checkbox" id="toggle-movement" checked onchange="
-                if(this.checked) {
-                    this.nextElementSibling.style.display = '';
-                } else {
-                    this.nextElementSibling.style.display = 'none';
-                }
-                toggleMovement = this.checked;
-                " />
+        <input type="checkbox" id="toggle-movement" checked />
         <div>
           <p style="margin: 0px; margin-top: 10px">sum of velocities: <span id="movement-sum"></span></p>
           <p style="margin: 0px">average velocity: <span id="movement-avg"></span></p>
@@ -109,24 +102,20 @@
 
     <div>
       <br />
-      <button onclick="reset();">reset</button>
-      <button id="pause"
-        onclick="clearInterval(interv); this.nextElementSibling.style.display=''; this.style.display='none';">
+      <button id="reset">reset</button>
+      <button id="pause">
         pause
       </button>
-      <button id="resume" onclick="loop(); this.previousElementSibling.style.display=''; this.style.display='none';"
-        style="display: none">
+      <button id="resume" style="display: none">
         resume
       </button>
     </div>
 
     <div>
       <br />
-      <button onclick="exportCoords();">export coordinates to json</button>
+      <button id="export">export coordinates to json</button>
     </div>
   </div>
-
-  <script src="./init.js"></script>
 </body>
 
 </html>
