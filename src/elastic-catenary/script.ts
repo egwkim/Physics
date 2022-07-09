@@ -186,23 +186,4 @@ function toggleControl(e: HTMLElement) {
   }
 }
 
-export {
-  canvas,
-  ctx,
-  movementAvgP,
-  movementSumP,
-  pauseBtn,
-  resumeBtn,
-  reset,
-  exportCoords,
-  toggleControl,
-  springConstant,
-  initLen,
-  gravityConstant,
-  friction,
-  toggleStretchOnly,
-  dt,
-  pointCnt,
-  pointDistance,
-  updateSettings,
-};
+export { ctx, springConstant, initLen, gravityConstant, friction, toggleStretchOnly, dt, pointCnt, pointDistance };

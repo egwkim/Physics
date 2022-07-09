@@ -112,4 +112,4 @@ function physicsUpdate() {
   }
 }
 
-export { Point, physicsInit, physicsUpdate, points };
+export { physicsInit, physicsUpdate, points };
