@@ -7,8 +7,8 @@ const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
 const movementAvgP = document.getElementById('movement-avg') as HTMLElement;
 const movementSumP = document.getElementById('movement-sum') as HTMLElement;
-const pauseBtn = document.getElementById('pause') as HTMLElement;
-const resumeBtn = document.getElementById('resume') as HTMLElement;
+const pauseBtn = document.getElementById('pause') as HTMLButtonElement;
+const resumeBtn = document.getElementById('resume') as HTMLButtonElement;
 
 function resizeCvs() {
   canvas.setAttribute('width', `${window.innerWidth - 10}px`);
@@ -76,15 +76,18 @@ window.addEventListener('load', () => {
     toggleMovement = this.checked;
   });
 
-  const puaseBtnElm = document.getElementById('pause') as HTMLButtonElement;
+  const resetBtn = document.getElementById('reset') as HTMLButtonElement;
+  resetBtn.addEventListener('click', () => {
+    reset();
+  });
+
   pauseBtn.addEventListener('click', function () {
     clearInterval(interv);
     (<HTMLElement>this.nextElementSibling!).style.display = '';
     this.style.display = 'none';
   });
 
-  const resumeBtnElm = document.getElementById('resume') as HTMLButtonElement;
-  pauseBtn.addEventListener('click', function () {
+  resumeBtn.addEventListener('click', function () {
     loop();
     (<HTMLElement>this.previousElementSibling!).style.display = '';
     this.style.display = 'none';
