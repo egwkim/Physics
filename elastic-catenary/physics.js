@@ -1,4 +1,6 @@
-"use strict";
+// TODO Cleanup code
+import { ctx, springConstant, initLen, gravityConstant, friction, toggleStretchOnly, dt, pointCnt, pointDistance, } from './script.js';
+let points = [];
 class Point {
     constructor(x, y) {
         this.x = x;
@@ -74,3 +76,4 @@ function physicsUpdate() {
         points[i].updatePos();
     }
 }
+export { physicsInit, physicsUpdate, points };
