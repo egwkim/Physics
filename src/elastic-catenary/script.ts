@@ -37,8 +37,6 @@ let toggleLine = true; // If true, draws lines between adjacent points
 let toggleCircle = true; // If true, draws circle on the points
 let toggleMovement = true; // If true, displays the sum of velocities
 
-let movement; // Sum of the velocities
-
 let updateSettings = true;
 
 const settingInputs = document.querySelectorAll('#settings > div > input');
@@ -110,11 +108,11 @@ function loop() {
       getInputValues();
       updateSettings = false;
     }
-
     physicsUpdate();
-
     clearFrame();
-    let movement = 0;
+
+    let movement = 0; // Sum of the velocities
+
     for (let i = 0; i < pointCnt; i++) {
       // draw lines and dots
       if (toggleLine && i != 0) {
@@ -127,6 +125,7 @@ function loop() {
       // calculate total movement
       if (toggleMovement) movement += (points[i].vx ** 2 + points[i].vy ** 2) ** 0.5;
     }
+
     // show total movement
     if (toggleMovement) {
       movementSumP.innerText = movement.toFixed(6);
