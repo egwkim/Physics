@@ -135,17 +135,26 @@ function whileMouseDown(event: { pageX: number; pageY: number }) {
     return;
   }
 
-  let newX: number, newY: number;
+  let newX: number, newY: number, newP: number, newV: number;
   switch (drawMode) {
     case 1:
       // isobaric
       newX = event.pageX;
       newY = prevY;
+      newV = newX * scale;
+      newP = (cvsHeight - newY) * scale;
+      if (newP * newV > k * T_h) {
+        newX = (k * T_h) / (newP * scale);
+      } else if (newP * newV < k * T_l) {
+        newX = (k * T_l) / (newP * scale);
+      }
       break;
     case 2:
       // isochoric
       newX = prevX;
       newY = event.pageY;
+      newV = newX * scale;
+      newP = (cvsHeight - newY) * scale;
       break;
     case 3:
       // isotherm
@@ -163,7 +172,17 @@ function whileMouseDown(event: { pageX: number; pageY: number }) {
       // free draw
       newX = event.pageX;
       newY = event.pageY;
+      newV = newX * scale;
+      newP = (cvsHeight - newY) * scale;
       break;
+  }
+
+  newV = newX * scale;
+  newP = (cvsHeight - newY) * scale;
+  if (newP * newV > k * T_h) {
+    newY = cvsHeight - (k * T_h) / (newV * scale);
+  } else if (newP * newV < k * T_l) {
+    newY = cvsHeight - (k * T_l) / (newV * scale);
   }
 
   let dV = (newX - prevX) * scale;
