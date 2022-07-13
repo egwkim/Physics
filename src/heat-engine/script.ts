@@ -3,12 +3,12 @@ import { cvsHeight, clearCvs, renderIsotherm, drawLines } from './canvas.js';
 setInterval(() => {}, 100);
 
 // PV = kT
-const k = 1;
+let k = 1;
 
 // dU = c * dT
-const c = 2;
+let c = 2;
 
-const scale = 1 / 10;
+let scale = 1 / 10;
 
 let pointList: { x: number; y: number }[] = [];
 
@@ -28,6 +28,60 @@ let Q_total = 0;
 let W_in = 0;
 let W_out = 0;
 let W_total = 0;
+
+function loadSettings() {
+  c = Number((<HTMLInputElement>document.getElementById('c')).value);
+  k = Number((<HTMLInputElement>document.getElementById('k')).value);
+  scale = Number((<HTMLInputElement>document.getElementById('scale')).value);
+}
+
+function clear() {
+  pointList = [];
+  drawMode = 0;
+  prevX = 0;
+  prevY = 0;
+  P = 0;
+  V = 0;
+  isMouseDown = 0;
+  Q_out = 0;
+  Q_total = 0;
+  W_in = 0;
+  W_out = 0;
+  W_total = 0;
+  Q_in = 0;
+  clearCvs();
+  textElement.innerText = '';
+}
+
+function reset() {
+  (<HTMLInputElement>document.getElementById('c')).value = '2';
+  (<HTMLInputElement>document.getElementById('c-range')).value = '2';
+  (<HTMLInputElement>document.getElementById('k')).value = '3';
+  (<HTMLInputElement>document.getElementById('k-range')).value = '3';
+  (<HTMLInputElement>document.getElementById('scale')).value = '0.1';
+  (<HTMLInputElement>document.getElementById('scale-range')).value = '0.1';
+  loadSettings();
+  clear();
+}
+
+window.addEventListener('load', () => {
+  document.querySelectorAll('#control > div > input').forEach((item) => {
+    item.addEventListener('change', () => {
+      loadSettings();
+      clear();
+    });
+  });
+
+  document.getElementById('clear')?.addEventListener('click', () => {
+    clear();
+  });
+
+  document.getElementById('reset')?.addEventListener('click', () => {
+    reset();
+  });
+
+  reset();
+});
 
 function calculate(V: number, P: number, dV: number, dP: number) {
   let W = (dV * (2 * P + dP)) / 2;
@@ -145,10 +199,10 @@ function whileMouseDown(event: { pageX: number; pageY: number }) {
   });
 })();
 
-const textElement = document.getElementById('text-box') as HTMLElement;
+const textElement = document.querySelector('#text-box > p') as HTMLElement;
 function updateText() {
   textElement.innerText =
-    `P: ${Math.round(prevY * scale)}   V: ${Math.round(prevX * scale)}\n` +
+    `P: ${Math.round(P)}   V: ${Math.round(V)} T: ${Math.round(c * P * V)}\n` +
     `Q in: ${Math.round(Q_in)}   Q out: ${Math.round(Q_out)}   Total Q: ${Math.round(Q_total)}\n` +
     `W in: ${Math.round(W_in)}   W out: ${Math.round(W_out)}   Total W: ${Math.round(W_total)}\n` +
     `e: ${Math.round((W_total / Q_in) * 1000) / 10}%`;

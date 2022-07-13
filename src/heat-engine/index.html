@@ -13,7 +13,33 @@
     <canvas id="canvas"></canvas>
   </div>
 
+  
   <div id="text-box">
+    <div id="control">    
+      <div>
+        k<br />
+        <input type="range" id="k-range" class="reset" min="0.1" max="10" step="0.1"
+          oninput="this.nextElementSibling.value = this.value" />
+        <input type="number" id="k" class="reset" min="3" max="101" step="0.1"
+          oninput="this.previousElementSibling.value = this.value" />
+      </div>
+      <div>
+        c<br />
+        <input type="range" id="c-range" class="reset" min="0.1" max="10" step="0.1"
+          oninput="this.nextElementSibling.value = this.value" />
+        <input type="number" id="c" class="reset" min="0.1" max="10" step="0.1"
+          oninput="this.previousElementSibling.value = this.value" />
+      </div>
+      <div>
+        scale<br />
+        <input type="range" id="scale-range" class="reset" min="0.01" max="1" step="0.01"
+          oninput="this.nextElementSibling.value = this.value" />
+        <input type="number" id="scale" class="reset" min="0.01" max="1" step="0.01"
+          oninput="this.previousElementSibling.value = this.value" />
+      </div>
+      <button id="clear">clear</button>
+      <button id="reset">reset</button>
+    </div>
     <p></p>
   </div>
 
