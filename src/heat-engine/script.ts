@@ -3,10 +3,13 @@ import { cvsHeight, clearCvs, renderIsotherm, drawLines } from './canvas.js';
 setInterval(() => {}, 100);
 
 // PV = kT
-let k = 1;
+let k: number;
 
 // dU = c * dT
-let c = 2;
+let c: number;
+
+let T_h: number;
+let T_l: number;
 
 let scale = 1 / 10;
 
@@ -32,6 +35,8 @@ let W_total = 0;
 function loadSettings() {
   c = Number((<HTMLInputElement>document.getElementById('c')).value);
   k = Number((<HTMLInputElement>document.getElementById('k')).value);
+  T_h = Number((<HTMLInputElement>document.getElementById('T_h')).value);
+  T_l = Number((<HTMLInputElement>document.getElementById('T_l')).value);
   scale = Number((<HTMLInputElement>document.getElementById('scale')).value);
 }
 
@@ -50,6 +55,8 @@ function clear() {
   W_total = 0;
   Q_in = 0;
   clearCvs();
+  renderIsotherm(T_h, '#ff0000aa');
+  renderIsotherm(T_l, '#0000ffaa');
   textElement.innerText = '';
 }
 
@@ -58,6 +65,10 @@ function reset() {
   (<HTMLInputElement>document.getElementById('c-range')).value = '2';
   (<HTMLInputElement>document.getElementById('k')).value = '3';
   (<HTMLInputElement>document.getElementById('k-range')).value = '3';
+  (<HTMLInputElement>document.getElementById('T_h')).value = '5000';
+  (<HTMLInputElement>document.getElementById('T_h-range')).value = '5000';
+  (<HTMLInputElement>document.getElementById('T_l')).value = '0';
+  (<HTMLInputElement>document.getElementById('T_l-range')).value = '0';
   (<HTMLInputElement>document.getElementById('scale')).value = '0.1';
   (<HTMLInputElement>document.getElementById('scale-range')).value = '0.1';
   loadSettings();
@@ -117,6 +128,8 @@ function whileMouseDown(event: { pageX: number; pageY: number }) {
     clearCvs();
     drawLines();
     renderIsotherm((P * V) / k);
+    renderIsotherm(T_h, '#ff0000aa');
+    renderIsotherm(T_l, '#0000ffaa');
     updateText();
 
     return;
@@ -165,6 +178,8 @@ function whileMouseDown(event: { pageX: number; pageY: number }) {
   clearCvs();
   drawLines();
   renderIsotherm((P * V) / k);
+  renderIsotherm(T_h, '#ff0000aa');
+  renderIsotherm(T_l, '#0000ffaa');
   updateText();
 
   prevX = newX;
@@ -202,7 +217,7 @@ function whileMouseDown(event: { pageX: number; pageY: number }) {
 const textElement = document.querySelector('#text-box > p') as HTMLElement;
 function updateText() {
   textElement.innerText =
-    `P: ${Math.round(P)}   V: ${Math.round(V)} T: ${Math.round(c * P * V)}\n` +
+    `P: ${Math.round(P)}   V: ${Math.round(V)} T: ${Math.round((P * V) / k)}\n` +
     `Q in: ${Math.round(Q_in)}   Q out: ${Math.round(Q_out)}   Total Q: ${Math.round(Q_total)}\n` +
     `W in: ${Math.round(W_in)}   W out: ${Math.round(W_out)}   Total W: ${Math.round(W_total)}\n` +
     `e: ${Math.round((W_total / Q_in) * 1000) / 10}%`;

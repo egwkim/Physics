@@ -25,7 +25,7 @@ window.onresize = resizeCvs;
 
 resizeCvs();
 
-function renderIsotherm(T: number) {
+function renderIsotherm(T: number, color='#22aa66aa') {
   ctx.beginPath();
   for (let y = 0; y < cvsHeight; y++) {
     let x = (k * T) / (scale * scale * (cvsHeight - y));
@@ -34,7 +34,7 @@ function renderIsotherm(T: number) {
     }
     ctx.lineTo(x, y);
   }
-  ctx.strokeStyle = '#22aa66aa';
+  ctx.strokeStyle = color;
   ctx.stroke();
 }
 
