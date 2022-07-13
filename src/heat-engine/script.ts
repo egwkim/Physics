@@ -61,12 +61,12 @@ function clear() {
 }
 
 function reset() {
-  (<HTMLInputElement>document.getElementById('c')).value = '2';
-  (<HTMLInputElement>document.getElementById('c-range')).value = '2';
-  (<HTMLInputElement>document.getElementById('k')).value = '3';
-  (<HTMLInputElement>document.getElementById('k-range')).value = '3';
-  (<HTMLInputElement>document.getElementById('T_h')).value = '5000';
-  (<HTMLInputElement>document.getElementById('T_h-range')).value = '5000';
+  (<HTMLInputElement>document.getElementById('c')).value = '3';
+  (<HTMLInputElement>document.getElementById('c-range')).value = '3';
+  (<HTMLInputElement>document.getElementById('k')).value = '2';
+  (<HTMLInputElement>document.getElementById('k-range')).value = '2';
+  (<HTMLInputElement>document.getElementById('T_h')).value = '10000';
+  (<HTMLInputElement>document.getElementById('T_h-range')).value = '10000';
   (<HTMLInputElement>document.getElementById('T_l')).value = '0';
   (<HTMLInputElement>document.getElementById('T_l-range')).value = '0';
   (<HTMLInputElement>document.getElementById('scale')).value = '0.1';
