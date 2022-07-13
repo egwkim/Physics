@@ -51,8 +51,8 @@ function reset() {
     document.getElementById('c-range').value = '3';
     document.getElementById('k').value = '2';
     document.getElementById('k-range').value = '2';
-    document.getElementById('T_h').value = '6000';
-    document.getElementById('T_h-range').value = '6000';
+    document.getElementById('T_h').value = '10000';
+    document.getElementById('T_h-range').value = '10000';
     document.getElementById('T_l').value = '0';
     document.getElementById('T_l-range').value = '0';
     document.getElementById('scale').value = '0.1';
