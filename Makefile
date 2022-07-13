@@ -9,6 +9,10 @@ build: clean tsc copy
 clean:
 	rm -rf dist/*
 
+.PHONY: test
+test: build
+	python server.py
+
 # Copy files from src to dist excluding *.ts
 .PHONY: copy
 copy:
