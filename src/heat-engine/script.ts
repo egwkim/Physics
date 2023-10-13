@@ -1,7 +1,5 @@
 import { cvsHeight, clearCvs, renderIsotherm, drawLines } from './canvas.js';
 
-setInterval(() => {}, 100);
-
 // PV = kT
 let k: number;
 
