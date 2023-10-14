@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Special Relativity Simulator</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="screen"></div>
+    <div id="control-right"></div>
+    <div id="control-down"></div>
+    <div id="objects">
+      <div class="spaceship">
+        <svg viewbox="-50 -20 50 40">
+          <polygon points="0,0 -20,20, -50,20 -50,-20 -20,-20" fill="none" stroke="white" stroke-width="2" />
+        </svg>
+      </div>
+      <div class="point">
+        <svg viewbox="-4 -4 8 8">
+          <circle cx="0" cy="0" r="4" fill="white" stroke="none" />
+        </svg>
+      </div>
+    </div>
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>

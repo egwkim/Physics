@@ -1,0 +1,82 @@
+:root {
+  --screen-width: 80vw;
+  --screen-height: 84vh;
+}
+
+body {
+  /* disable scrollbar and set width, height to viewport size*/
+  margin: 0px;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+body > div {
+  float: left;
+  box-sizing: border-box;
+}
+
+#screen {
+  width: var(--screen-width);
+  height: var(--screen-height);
+
+  background-color: #000000;
+  overflow: hidden;
+}
+
+#screen > div {
+  position: absolute;
+}
+
+#screen > div > svg {
+  position: inherit;
+}
+
+#control-right {
+  width: calc(100vw - var(--screen-width));
+  height: var(--screen-height);
+
+  background-color: #000000;
+  border-left: 1px solid white;
+}
+
+#control-down {
+  width: 100vw;
+  height: calc(100vh - var(--screen-height));
+
+  background-color: #000000;
+  border-top: 1px solid white;
+}
+
+#control-down > button {
+  font-size: larger;
+}
+
+#objects {
+  visibility: collapse;
+}
+
+.spaceship {
+  width: 50px;
+  height: 40px;
+  transform: translate(-100%, -50%);
+}
+
+.point {
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%, -50%);
+}
+
+/* For testing */
+#objects > .light-source{
+  visibility: visible !important;
+}
+
+#objects > div {
+  position: absolute;
+}
+
+#objects > div > svg {
+  position: inherit;
+}
