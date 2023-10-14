@@ -69,7 +69,7 @@ body > div {
 }
 
 /* For testing */
-#objects > .light-source{
+#objects > .light-source {
   visibility: visible !important;
 }
 

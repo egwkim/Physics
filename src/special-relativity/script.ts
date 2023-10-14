@@ -1,6 +1,8 @@
 const screenDiv = <HTMLDivElement>document.getElementById('screen');
 const controlDownDiv = <HTMLDivElement>document.getElementById('control-down');
-const controlRightDiv = <HTMLDivElement>document.getElementById('control-right');
+const controlRightDiv = <HTMLDivElement>(
+  document.getElementById('control-right')
+);
 
 class Spaceship {
   x: number;
@@ -73,7 +75,13 @@ class Clock {
   }
 }
 
-const objectNameList = ['spaceship', 'point', 'light source', 'light detector', 'clock'];
+const objectNameList = [
+  'spaceship',
+  'point',
+  'light source',
+  'light detector',
+  'clock',
+];
 const objects: { [key: string]: any } = {
   spaceship: { name: 'spaceship', class: Spaceship },
   point: { name: 'point', class: Point },
@@ -93,7 +101,13 @@ function reset() {}
 function clearAll() {}
 
 function initControls() {
-  const button_names = objectNameList.concat(['play/pause', 'slower', 'faster', 'reset', 'clear all']);
+  const button_names = objectNameList.concat([
+    'play/pause',
+    'slower',
+    'faster',
+    'reset',
+    'clear all',
+  ]);
   button_names.forEach((button_name, index) => {
     const button = document.createElement('button');
     button.innerText = button_name;
@@ -166,7 +180,9 @@ function addObject() {}
 
 function main() {
   Object.keys(objects).forEach((key) => {
-    objects[key].html = document.querySelector('#objects > .' + objects[key].name.replace(/ /g, '-')) as HTMLElement;
+    objects[key].html = document.querySelector(
+      '#objects > .' + objects[key].name.replace(/ /g, '-')
+    ) as HTMLElement;
   });
   initControls();
   initScreen();
