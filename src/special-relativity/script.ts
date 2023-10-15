@@ -4,74 +4,67 @@ const controlRightDiv = <HTMLDivElement>(
   document.getElementById('control-right')
 );
 
-class Spaceship {
-  x: number;
-  y: number;
-  vx: number;
-  m: number;
-  observer: Boolean;
-  html: HTMLElement;
-  constructor(x: number, y: number, vx: number) {
-    this.x = x;
-    this.y = y;
-    this.vx = vx;
-    this.m = 1;
-    this.observer = false;
-    this.html = objects.spaceship.html.cloneNode(true) as HTMLElement;
-    this.html.style.left = `${x}px`;
-    this.html.style.top = `${y}px`;
-    screenDiv.appendChild(this.html);
-  }
-}
-
 class Point {
+  /**
+   * Basic object with base properties and methods
+   */
   x: number;
   y: number;
   vx: number;
+  lorentzFactor!: number;
   html: HTMLElement;
-  constructor(x: number, y: number, vx: number) {
+  objectName: string;
+  constructor(x: number, y: number, vx: number, objectName: string = 'point') {
+    this.objectName = objectName;
     this.x = x;
     this.y = y;
     this.vx = vx;
-    this.html = objects.point.html.cloneNode(true) as HTMLElement;
-    this.html.style.left = `${x}px`;
-    this.html.style.top = `${y}px`;
+    this.updateLorentzFactor();
+    this.html = objectTypes[objectName].html.cloneNode(true) as HTMLElement;
+    this.html.style.left = `${x * pixelInLightSecond}px`;
+    this.html.style.top = `${y * pixelInLightSecond}px`;
     screenDiv.appendChild(this.html);
+  }
+
+  updateLorentzFactor() {
+    const relVx = (this.vx - observerVx) / (1 - this.vx * observerVx);
+    this.lorentzFactor = (1 - relVx ** 2) ** -0.5;
   }
 }
 
-class LightSource {
-  x: number;
-  y: number;
-  vx: number;
+class Spaceship extends Point {
+  restM: number;
+  length: number;
+  observer: Boolean;
+  constructor(x: number, y: number, vx: number) {
+    super(x, y, vx, 'spaceship');
+    this.restM = 1;
+    this.length = 1;
+    this.observer = false;
+  }
+
+  public get m(): number {
+    return this.lorentzFactor * this.restM;
+  }
+}
+
+class LightSource extends Point {
   direction: number;
   constructor(x: number, y: number, vx: number) {
-    this.x = x;
-    this.y = y;
-    this.vx = vx;
+    super(x, y, vx, 'light source');
     this.direction = 0;
   }
 }
 
-class LightDetector {
-  x: number;
-  y: number;
-  vx: number;
+class LightDetector extends Point {
   constructor(x: number, y: number, vx: number) {
-    this.x = x;
-    this.y = y;
-    this.vx = vx;
+    super(x, y, vx, 'light detector');
   }
 }
 
-class Clock {
-  x: number;
-  y: number;
-  vx: number;
+class Clock extends Point {
   constructor(x: number, y: number, vx: number) {
-    this.x = x;
-    this.y = y;
-    this.vx = vx;
+    super(x, y, vx, 'clock');
   }
 }
 
@@ -82,44 +75,102 @@ const objectNameList = [
   'light detector',
   'clock',
 ];
-const objects: { [key: string]: any } = {
-  spaceship: { name: 'spaceship', class: Spaceship },
-  point: { name: 'point', class: Point },
-  lightSource: { name: 'light source', class: LightSource },
-  lightDetector: { name: 'light detector', class: LightDetector },
-  clock: { name: 'clock', class: Clock },
-};
+const objectTypes: {
+  [key: string]: { name: string; html: HTMLElement };
+} = {};
+const objectList: Point[] = [];
+const pixelInLightSecond = 150;
 
 let selectedObject: any = null;
 let playStatus: boolean = false;
+let playSpeed: number = 1;
+let observerVx = 0;
+let gamma: number = 1;
+let xOffset: number = 0;
+let tOffset: number = 0;
 
-// TODO
-function playPause() {}
+function getObjectHTML(objectName: string) {
+  return document.querySelector(
+    '#objects > .' + objectName.toKebabCase()
+  ) as HTMLElement;
+}
+
+let playInterval: number;
+function setObserver() {
+  let vx = Number.parseFloat(
+    prompt('observer velocity', observerVx.toString()) ?? '0.5'
+  );
+  if (isNaN(vx)) {
+    vx = 0.5;
+  }
+  vx = vx >= 1 ? 0.99 : vx <= -1 ? -0.99 : vx;
+  observerVx = vx;
+  xOffset = Number.parseFloat(prompt('x offset', xOffset.toString()) ?? '0');
+  if (isNaN(xOffset)) xOffset = 0;
+  tOffset = Number.parseFloat(prompt('t offset', tOffset.toString()) ?? '0');
+  if (isNaN(tOffset)) tOffset = 0;
+
+  gamma = 1 / (1 - vx ** 2) ** 0.5;
+
+  objectList.forEach((object) => {
+    object.updateLorentzFactor();
+    render(0);
+  });
+}
+function playPause() {
+  if (playStatus) {
+    playStatus = false;
+    clearInterval(playInterval);
+  } else {
+    playStatus = true;
+    const startTime = performance.now();
+    playInterval = setInterval(() => {
+      render((performance.now() - startTime) / 1000);
+    }, 1000 / 60);
+  }
+}
 function slower() {}
 function faster() {}
-function reset() {}
+function reset() {
+  if (playStatus) {
+    playPause();
+  }
+  render(0);
+}
 function clearAll() {}
 
 function initControls() {
-  const button_names = objectNameList.concat([
+  const buttonNames = objectNameList.concat([
+    'set observer',
     'play/pause',
     'slower',
     'faster',
     'reset',
     'clear all',
   ]);
-  button_names.forEach((button_name, index) => {
+  buttonNames.forEach((buttonName, index) => {
     const button = document.createElement('button');
-    button.innerText = button_name;
+    button.innerText = buttonName;
     controlDownDiv.appendChild(button);
+    // TODO remove after implementation
+    /*if ([2,3,4,7,8,10].includes(index)) {
+      button.addEventListener('click', () => {
+        selectedObject = null;
+        alert('개발 중...');
+      });
+    }*/
+
     if (index < 5) {
       button.addEventListener('click', () => {
-        selectedObject = button_name;
+        selectedObject = buttonName;
       });
       return;
     }
     let controlFunction: () => any;
-    switch (button_name) {
+    switch (buttonName) {
+      case 'set observer':
+        controlFunction = setObserver;
+        break;
       case 'play/pause':
         controlFunction = playPause;
         break;
@@ -155,37 +206,59 @@ function initControls() {
 function initScreen() {
   screenDiv.addEventListener('mousedown', (e) => {
     let newObject: any;
+    const x = e.clientX / pixelInLightSecond;
+    const y = e.clientY / pixelInLightSecond;
     switch (selectedObject) {
       case 'spaceship':
-        newObject = new Spaceship(e.clientX, e.clientY, 0);
+        let vx = Number.parseFloat(prompt() ?? '0.5');
+        if (isNaN(vx)) vx = 0.5;
+        vx = vx >= 1 ? 0.99 : vx <= -1 ? -0.99 : vx;
+        newObject = new Spaceship(x, y, vx);
         break;
       case 'point':
-        newObject = new Point(e.clientX, e.clientY, 0);
+        newObject = new Point(x, y, 0);
         break;
       case 'light source':
-        newObject = new LightSource(e.clientX, e.clientY, 0);
+        newObject = new LightSource(x, y, 0);
         break;
       case 'light detector':
-        newObject = new LightDetector(e.clientX, e.clientY, 0);
+        newObject = new LightDetector(x, y, 0);
         break;
       case 'clock':
-        newObject = new Clock(e.clientX, e.clientY, 0);
+        newObject = new Clock(x, y, 0);
         break;
       default:
+    }
+    if (newObject) {
+      objectList.push(newObject);
     }
   });
 }
 
-function addObject() {}
+function render(t: number) {
+  objectList.forEach((object) => {
+    const originT =
+      ((t + tOffset) / gamma + observerVx * object.x) /
+      (1 - observerVx * object.vx);
+    const x = gamma * (object.x + (object.vx - observerVx) * originT) + xOffset;
+    object.html.style.left = `${x * pixelInLightSecond}px`;
+    object.html.style.top = `${object.y * pixelInLightSecond}px`;
+  });
+}
 
 function main() {
-  Object.keys(objects).forEach((key) => {
-    objects[key].html = document.querySelector(
-      '#objects > .' + objects[key].name.replace(/ /g, '-')
-    ) as HTMLElement;
+  objectNameList.forEach((name) => {
+    objectTypes[name.toCamelCase()] = { name, html: getObjectHTML(name) };
+  });
+  Object.keys(objectTypes).forEach((key) => {
+    objectTypes[key].html.addEventListener('click', () => {
+      selectedObject = objectTypes[key].name;
+    });
   });
   initControls();
   initScreen();
 }
 
 main();
+
+export {};
