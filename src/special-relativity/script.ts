@@ -137,7 +137,12 @@ function reset() {
   }
   render(0);
 }
-function clearAll() {}
+function clearAll() {
+  objectList.forEach((object) => {
+    object.html.remove();
+  });
+  objectList.length = 0;
+}
 
 function initControls() {
   const buttonNames = objectNameList.concat([
@@ -153,16 +158,17 @@ function initControls() {
     button.innerText = buttonName;
     controlDownDiv.appendChild(button);
     // TODO remove after implementation
-    /*if ([2,3,4,7,8,10].includes(index)) {
+    if ([2, 3, 4, 7, 8].includes(index)) {
       button.addEventListener('click', () => {
         selectedObject = null;
         alert('개발 중...');
       });
-    }*/
+      return;
+    }
 
     if (index < 5) {
       button.addEventListener('click', () => {
-        selectedObject = buttonName;
+        selectedObject = buttonName.toCamelCase();
       });
       return;
     }

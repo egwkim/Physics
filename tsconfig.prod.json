@@ -6,6 +6,6 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "sourceMap": false,
-    "lib": ["es6", "dom"]
+    "lib": ["ES2016", "dom"]
   }
 }
