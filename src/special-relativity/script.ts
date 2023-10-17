@@ -126,6 +126,19 @@ function validateVelocity(velocity: number) {
   }
 }
 
+/**
+ * Update observer velocity and global gamma
+ *
+ * If velocity is invalid, use validateVelocity method and return false.
+ * If velocity is valid, return true.
+ * observerVx and gamma are updated in both cases.
+ */
+function updateObserverVx(velocity: number): boolean {
+  observerVx = validateVelocity(velocity);
+  gamma = (1 - observerVx ** 2) ** -0.5;
+  return observerVx == velocity;
+}
+
 function getObjectHTML(objectName: string) {
   return document.querySelector(
     '#objects > .' + objectName.toKebabCase()
@@ -137,12 +150,11 @@ function setObserver() {
   objectControlDiv.style.display = 'none';
   observerControlDiv.style.display = '';
 
-  gamma = 1 / (1 - observerVx ** 2) ** 0.5;
-
+  /* TODO
   objectList.forEach((object) => {
     object.updateLorentzFactor();
-    render(0);
   });
+  */
 }
 function playPause() {
   if (playStatus) {
@@ -174,8 +186,9 @@ function clearAll() {
 function initScreen() {
   screenDiv.addEventListener('mousedown', (e) => {
     let newObject: any;
-    const x = e.clientX / pixelInLightSecond;
-    const y = e.clientY / pixelInLightSecond;
+    // TODO Apply lorentz transform when placing objects.
+    const x = Math.round((e.clientX / pixelInLightSecond) * 100) / 100;
+    const y = Math.round((e.clientY / pixelInLightSecond) * 100) / 100;
     if (typeof selectedObject === 'string' || selectedObject instanceof String)
       switch (selectedObject) {
         case 'spaceship':
@@ -209,13 +222,36 @@ function initScreen() {
 function initRightControl() {
   const objectControlNames = ['x', 'y', 'vx'];
   const observerControlNames = ['observer-vx', 'x-offset', 't-offset'];
+
   objectControlNames.forEach((controlName) => {
     const p = document.createElement('p');
     p.innerText = controlName + ': ';
     const input = document.createElement('input');
     input.type = 'number';
     input.id = controlName + '-input';
-    input.addEventListener('input', () => {
+
+    /**
+     * Read value from input and validate it.
+     * Used for right control button event listener callback function.
+     */
+    let getValue: () => number;
+    if (controlName == 'vx') {
+      input.step = '0.1';
+      input.max = '1';
+      input.min = '-1';
+      getValue = function () {
+        return validateVelocity(Number.parseFloat(input.value));
+      };
+    } else {
+      getValue = function () {
+        const value = Number.parseFloat(input.value);
+        if (isNaN(value)) {
+          return 0;
+        }
+        return value;
+      };
+    }
+    input.addEventListener('change', () => {
       if (
         selectedObject === null ||
         typeof selectedObject === 'string' ||
@@ -224,15 +260,13 @@ function initRightControl() {
       ) {
         return;
       }
-
-      selectedObject[controlName] = validateVelocity(
-        Number.parseFloat(input.value)
-      );
+      selectedObject[controlName] = getValue();
       render(0);
     });
     p.appendChild(input);
     objectControlDiv.appendChild(p);
   });
+
   observerControlNames.forEach((controlName) => {
     const p = document.createElement('p');
     p.innerText = controlName + ': ';
@@ -241,22 +275,28 @@ function initRightControl() {
     input.id = controlName + '-input';
     switch (controlName) {
       case 'observer-vx':
+        input.step = '0.1';
+        input.max = '1';
+        input.min = '-1';
         input.value = observerVx.toString();
-        input.addEventListener('input', () => {
-          observerVx = validateVelocity(Number.parseFloat(input.value));
+        input.addEventListener('change', () => {
+          const valid = updateObserverVx(Number.parseFloat(input.value));
+          if (!valid) {
+            input.value = observerVx.toString();
+          }
           render(0);
         });
         break;
       case 'x-offset':
         input.value = xOffset.toString();
-        input.addEventListener('input', () => {
+        input.addEventListener('change', () => {
           xOffset = Number.parseFloat(input.value) ?? 0;
           render(0);
         });
         break;
       case 't-offset':
         input.value = tOffset.toString();
-        input.addEventListener('input', () => {
+        input.addEventListener('change', () => {
           tOffset = Number.parseFloat(input.value) ?? 0;
           render(0);
         });
