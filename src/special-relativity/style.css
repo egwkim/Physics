@@ -9,6 +9,7 @@ body {
   overflow: hidden;
   width: 100vw;
   height: 100vh;
+  color: white;
 }
 
 body > div {
@@ -38,6 +39,7 @@ body > div {
 
   background-color: #000000;
   border-left: 1px solid white;
+  padding-left: 10px;
 }
 
 #control-down {
