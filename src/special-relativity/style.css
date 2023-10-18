@@ -50,6 +50,23 @@ body > div {
   border-top: 1px solid white;
 }
 
+@media screen and (max-width: 992px) {
+  #screen {
+    width: 100vw;
+    height: 30vh;
+  }
+  #control-right {
+    width: 100vw;
+    height: 38vh;
+    border-left: 0;
+    border-top: 1px solid white;
+  }
+  #control-down {
+    width: 100vw;
+    height: 32vh;
+  }
+}
+
 #control-down > button {
   font-size: larger;
 }
